@@ -8,7 +8,10 @@ import json
 
 import pandas as pd
 import plotly.express as px
-from dash import Dash, Input, Output, dcc, html
+from dash import Dash, Input, Output, dash_table, dcc, html
+
+EQUIPE = ['Manel HASSAN', 'Tasnim BOURKHIS', 'Julia PLAYE-LORENTE', 'Marie BARDET', 'Inès BENBARA', 'Karell Steve JODOM CHOUDJA']
+DATASET = "Données des élections agrégées (data.gouv.fr), présidentielles 2002-2022"
 
 DOSSIER = Path(__file__).resolve().parent.parent / "data"
 PROCESSED = DOSSIER / "processed"
@@ -47,16 +50,42 @@ def charger_donnees():
     evolution = pd.read_parquet(PROCESSED / "evolution_nationale.parquet")
     departements = pd.read_parquet(PROCESSED / "departements_2022.parquet")
     departements["departement"] = departements["code_departement"].map(noms)
-    return contours, noms, votes, participation, evolution, departements
+    regles = pd.read_parquet(PROCESSED / "regles_association.parquet")
+    return contours, noms, votes, participation, evolution, departements, regles
 
 
-CONTOURS, NOMS, VOTES, PARTICIPATION, EVOLUTION, DEPARTEMENTS = charger_donnees()
+CONTOURS, NOMS, VOTES, PARTICIPATION, EVOLUTION, DEPARTEMENTS, REGLES = charger_donnees()
 ANNEES = sorted(VOTES["annee"].unique())
+
+
+def figure_clusters():
+    fig = px.choropleth(DEPARTEMENTS, geojson=CONTOURS, locations="code_departement",
+                        featureidkey="properties.code", color="nom_cluster", hover_name="departement",
+                        category_orders={"nom_cluster": sorted(DEPARTEMENTS["nom_cluster"].unique())})
+    fig.update_geos(fitbounds="locations", visible=False)
+    fig.update_layout(title="Groupes de départements", margin=dict(l=0, r=0, t=40, b=0),
+                      legend=dict(orientation="h", y=-0.05, title=None))
+    return fig
+
+
+def figure_profils():
+    colonnes = [c for c in DEPARTEMENTS.columns if c.startswith("vote_") and c != "vote_divers"] + ["taux_abstention"]
+    profils = DEPARTEMENTS.groupby("nom_cluster")[colonnes].mean().reset_index().melt(
+        id_vars="nom_cluster", var_name="indicateur", value_name="part")
+    profils["indicateur"] = profils["indicateur"].map(
+        lambda c: "Abstention" if c == "taux_abstention" else FAMILLES[c.replace("vote_", "")])
+    fig = px.bar(profils, x="indicateur", y="part", color="nom_cluster", barmode="group",
+                 category_orders={"nom_cluster": sorted(DEPARTEMENTS["nom_cluster"].unique())},
+                 title="Profil moyen de chaque groupe (1er tour 2022)")
+    fig.update_yaxes(tickformat=".0%", title=None)
+    fig.update_layout(xaxis_title=None, legend=dict(orientation="h", y=-0.25, title=None))
+    return fig
 
 app = Dash(__name__, title="Présidentielles 2002-2027")
 
 app.layout = html.Div(style={"fontFamily": "sans-serif", "maxWidth": "1200px", "margin": "auto"}, children=[
     html.H1("Présidentielles françaises : 2002-2022 et tendance 2027"),
+    html.P([html.B("Équipe : "), ", ".join(EQUIPE), html.Br(), html.B("Dataset : "), DATASET]),
     html.P("Résultats du 1er tour par département (data.gouv.fr). 2027 : tendance construite à partir des "
            "évolutions 2002-2022 et de la moyenne de 29 sondages. C'est une tendance, pas une prévision (2027* sur le curseur)."),
     dcc.Tabs([
@@ -97,6 +126,28 @@ app.layout = html.Div(style={"fontFamily": "sans-serif", "maxWidth": "1200px", "
                          style={"width": "300px"}),
             ]),
             dcc.Graph(id="nuage", style={"height": "600px"}),
+        ]),
+        dcc.Tab(label="Groupes de départements", children=[
+            html.P("K-means sur le profil de vote au 1er tour 2022 (part de chaque famille et abstention). "
+                   "Le nombre de groupes est choisi par le score de silhouette.", style={"margin": "15px 0"}),
+            html.Div(style={"display": "flex"}, children=[
+                dcc.Graph(id="carte-clusters", figure=figure_clusters(), style={"flex": 1, "height": "600px"}),
+                dcc.Graph(id="profil-clusters", figure=figure_profils(), style={"flex": 1, "height": "600px"}),
+            ]),
+        ]),
+        dcc.Tab(label="Règles d'association", children=[
+            html.P("Apriori sur les profils des départements (au-dessus ou au-dessous de la médiane). "
+                   "Support : part des départements concernés. Confiance : part des départements qui ont les "
+                   "antécédents et aussi la conséquence. Lift > 1 : la règle est plus fréquente que le hasard.",
+                   style={"margin": "15px 0"}),
+            dash_table.DataTable(
+                data=REGLES.round(2).to_dict("records"),
+                columns=[{"name": n, "id": c} for c, n in [("antecedents", "Si le département est..."),
+                                                          ("consequents", "alors il a souvent..."),
+                                                          ("support", "Support"), ("confidence", "Confiance"),
+                                                          ("lift", "Lift")]],
+                style_cell={"fontFamily": "sans-serif", "padding": "8px", "textAlign": "left"},
+                style_header={"fontWeight": "bold"}),
         ]),
     ]),
 ])
@@ -177,6 +228,11 @@ def _statsmodels_disponible():
         return True
     except ImportError:
         return False
+
+
+def creer_app():
+    """Renvoie l'application Dash (utilisé par main() dans le notebook)."""
+    return app
 
 
 if __name__ == "__main__":
