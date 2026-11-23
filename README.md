@@ -28,6 +28,8 @@ Les données brutes ne sont pas versionnées. Les placer dans `data/raw/` :
 
 La table `data/reference/candidats_familles.csv` associe chaque candidat
 (2002-2022) à une famille politique, pour comparer les élections entre elles.
+Les contours des départements (`data/reference/departements.geojson`) viennent de
+[france-geojson](https://github.com/gregoiredavid/france-geojson).
 
 ## Structure
 
