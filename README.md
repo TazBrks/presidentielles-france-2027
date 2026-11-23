@@ -16,15 +16,27 @@ puis dégager une tendance pour 2027. Le projet suit le processus KDD.
 - ACLED : événements en France (depuis 2020)
 - API REST Wikimedia
 
-Les données brutes ne sont pas versionnées : les placer dans `data/raw/`.
+## Récupérer les données
+
+Les données brutes ne sont pas versionnées. Les placer dans `data/raw/` :
+
+| Fichier | Source |
+|---|---|
+| `general_results.parquet` | [data.gouv.fr, Données des élections agrégées](https://www.data.gouv.fr/datasets/donnees-des-elections-agregees) |
+| `candidats_results.parquet` | même page |
+| export ACLED (CSV) | [ACLED Data Export Tool](https://acleddata.com), France, depuis 2020 |
+
+La table `data/reference/candidats_familles.csv` associe chaque candidat
+(2002-2022) à une famille politique, pour comparer les élections entre elles.
 
 ## Structure
 
 ```
 data/
   raw/          données brutes (non versionnées)
-  processed/    données nettoyées
-notebooks/      notebook principal (fonctions + main)
+  processed/    données nettoyées (générées par le notebook)
+  reference/    tables de référence (familles politiques)
+notebooks/      notebook principal presidentielles.ipynb (fonctions + main)
 dashboard/      application Dash
 ```
 
