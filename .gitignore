@@ -1,0 +1,26 @@
+# Données brutes
+data/raw/*
+!data/raw/.gitkeep
+
+# Secrets
+.env
+.env.*
+*.key
+secrets.*
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Système / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

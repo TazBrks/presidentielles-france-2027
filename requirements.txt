@@ -1,0 +1,9 @@
+pandas
+pyarrow
+numpy
+matplotlib
+plotly
+dash
+scikit-learn
+requests
+jupyter
