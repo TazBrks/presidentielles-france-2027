@@ -1,6 +1,6 @@
 """Dashboard Dash : présidentielles françaises 2002-2022 et tendance 2027.
 
-Lancer d'abord le notebook (notebooks/presidentielles.ipynb), qui crée les fichiers de data/processed,
+Lancer d'abord le notebook (notebooks/BOURKHIS_notebook.ipynb), qui crée les fichiers de data/processed,
 puis : python dashboard/app.py
 """
 from pathlib import Path
@@ -10,7 +10,7 @@ import pandas as pd
 import plotly.express as px
 from dash import Dash, Input, Output, dash_table, dcc, html
 
-EQUIPE = ['Manel HASSAN', 'Tasnim BOURKHIS', 'Julia PLAYE-LORENTE', 'Marie BARDET', 'Inès BENBARA', 'Karell Steve JODOM CHOUDJA']
+EQUIPE = ['Manel HASSAN', "Tasnim BOURKHIS (cheffe d'équipe)", 'Julia PLAYE-LORENTE', 'Marie BARDET', 'Inès BENBARA', 'Karell Steve JODOM CHOUDJA']
 DATASET = "Données des élections agrégées (data.gouv.fr), présidentielles 2002-2022"
 
 DOSSIER = Path(__file__).resolve().parent.parent / "data"

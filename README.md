@@ -2,6 +2,8 @@
 
 Projet final du cours **Programming for Data Science**.
 
+Équipe : Manel HASSAN, Tasnim BOURKHIS (cheffe d'équipe), Julia PLAYE-LORENTE, Marie BARDET, Inès BENBARA, Karell Steve JODOM CHOUDJA.
+
 ## Objectif
 
 Analyser les résultats des élections présidentielles françaises de 2002 à 2022
@@ -43,7 +45,7 @@ data/
   raw/          données brutes (non versionnées)
   processed/    données nettoyées (générées par le notebook)
   reference/    tables de référence (familles politiques)
-notebooks/      notebook principal presidentielles.ipynb (fonctions + main)
+notebooks/      notebook principal BOURKHIS_notebook.ipynb (fonctions + main)
 dashboard/      application Dash
 ```
 
@@ -55,7 +57,7 @@ pip install -r requirements.txt
 
 ## Lancer le notebook puis le dashboard
 
-1. Exécuter `notebooks/presidentielles.ipynb` en entier : il crée les fichiers de `data/processed/`.
+1. Exécuter `notebooks/BOURKHIS_notebook.ipynb` en entier : il crée les fichiers de `data/processed/`.
 2. Lancer le dashboard, puis ouvrir http://127.0.0.1:8050 :
 
 ```bash
