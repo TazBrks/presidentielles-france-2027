@@ -53,11 +53,18 @@ dashboard/      application Dash
 pip install -r requirements.txt
 ```
 
-## Lancer le dashboard
+## Lancer le notebook puis le dashboard
+
+1. Exécuter `notebooks/presidentielles.ipynb` en entier : il crée les fichiers de `data/processed/`.
+2. Lancer le dashboard, puis ouvrir http://127.0.0.1:8050 :
 
 ```bash
 python dashboard/app.py
 ```
+
+Le dashboard a trois onglets : carte et évolution par famille politique (2002-2022 et tendance 2027,
+cliquer sur un département pour voir son historique), abstention, et lien entre le vote 2022 et les
+indicateurs socio-économiques.
 
 ## Tendance 2027
 
