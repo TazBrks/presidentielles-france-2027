@@ -75,3 +75,9 @@ au score national entre 2002 et 2022, le prolonge jusqu'en 2027 par régression
 linéaire, puis l'applique à la moyenne des sondages 2027. Le résultat est comparé à la
 projection départementale publiée avec les sondages. C'est une tendance, pas une
 prévision.
+
+## Rendus
+
+- `notebooks/BOURKHIS_notebook.ipynb` : le notebook.
+- `docs/BOURKHIS_dashboard.html` : export statique du dashboard (preuve de fonctionnement).
+- `docs/demo.md` : déroulé de la démo et questions probables.
