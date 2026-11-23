@@ -1,17 +1,29 @@
-nom,prenom,famille
-LE PEN,Marine,extreme_droite
-PHILIPPE,Édouard,centre
-GLUCKSMANN,Raphaël,gauche
-MELENCHON,Jean-Luc,gauche_radicale
-RETAILLEAU,Bruno,droite
-LISNARD,David,droite
-ATTAL,Gabriel,centre
-ZEMMOUR,Éric,extreme_droite
-TONDELIER,Marine,ecologistes
-RUFFIN,François,gauche_radicale
-DUPONT-AIGNAN,Nicolas,souverainistes
-DE VILLEPIN,Dominique,droite
-ROUSSEL,Fabien,gauche_radicale
-POLONY,Natacha,souverainistes
-ARTHAUD,Nathalie,extreme_gauche
-BARDELLA,Jordan,extreme_droite
+slug,nom,prenom,famille
+le-pen,LE PEN,Marine,extreme_droite
+bardella,BARDELLA,Jordan,extreme_droite
+zemmour,ZEMMOUR,Éric,extreme_droite
+philippe,PHILIPPE,Édouard,centre
+attal,ATTAL,Gabriel,centre
+le-maire,LE MAIRE,Bruno,centre
+lagarde,LAGARDE,Jean-Christophe,centre
+glucksmann,GLUCKSMANN,Raphaël,gauche
+hollande,HOLLANDE,François,gauche
+faure,FAURE,Olivier,gauche
+royal,ROYAL,Ségolène,gauche
+guedj,GUEDJ,Jérôme,gauche
+bouamrane,BOUAMRANE,Karim,gauche
+melenchon,MELENCHON,Jean-Luc,gauche_radicale
+ruffin,RUFFIN,François,gauche_radicale
+roussel,ROUSSEL,Fabien,gauche_radicale
+maurel,MAUREL,Emmanuel,gauche_radicale
+retailleau,RETAILLEAU,Bruno,droite
+lisnard,LISNARD,David,droite
+bertrand,BERTRAND,Xavier,droite
+villepin,DE VILLEPIN,Dominique,droite
+tondelier,TONDELIER,Marine,ecologistes
+dupont-aignan,DUPONT-AIGNAN,Nicolas,souverainistes
+asselineau,ASSELINEAU,François,souverainistes
+polony,POLONY,Natacha,souverainistes
+arthaud,ARTHAUD,Nathalie,extreme_gauche
+bonnal,BONNAL,Sébastien,divers
+riner,RINER,Teddy,divers
