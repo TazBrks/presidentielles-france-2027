@@ -32,6 +32,7 @@ Les données brutes ne sont pas versionnées. Les placer dans `data/raw/` :
 | `FILOSOFI_CC_csv.zip` | [INSEE, Filosofi 2023](https://www.insee.fr/fr/statistiques/8984752) |
 | `serie_001759970_*.zip` (indice des prix) | [INSEE, série 001759970](https://www.insee.fr/fr/statistiques/serie/001759970) |
 | `acled_france_2020_2026.csv` (version agrégée) | [ACLED Data Export Tool](https://acleddata.com), France, depuis 2020 |
+| `sondages_1er_tour.csv`, `sondages_2nd_tour.csv` (sondages 2017, 2022 et 2027, tableaux Wikipédia) | [hugoC1/sondages_presidentielles](https://github.com/hugoC1/sondages_presidentielles/tree/main/data) |
 
 Les tables `data/reference/candidats_familles.csv` (2002-2022) et
 `candidats_familles_2027.csv` associent chaque candidat à une famille politique, pour comparer les élections entre elles.
@@ -70,11 +71,23 @@ indicateurs socio-économiques.
 
 ## Tendance 2027
 
-Pour chaque département et chaque famille politique, le notebook calcule l'écart
-au score national entre 2002 et 2022, le prolonge jusqu'en 2027 par régression
-linéaire, puis l'applique à la moyenne des sondages 2027. Le résultat est comparé à la
-projection départementale publiée avec les sondages. C'est une tendance, pas une
-prévision.
+**1er tour.** Pour chaque département et chaque famille politique, le notebook garde l'écart au score national
+de 2022 et l'applique à une moyenne pondérée des sondages 2027 (les sondages récents comptent plus, demi-vie de
+30 jours ; les hypothèses avec des candidats qui ont renoncé sont retirées). Un test sur le passé (prévoir 2017
+et 2022 avec les élections d'avant, en connaissant le résultat national) montre que garder l'écart de 2022 se
+trompe le moins : 1,2 point par département et par famille, contre 1,4 point en prolongeant la pente.
+
+**Test complet.** On refait toute la méthode avec les seuls sondages disponibles à l'époque. À 5 mois du
+1er tour (la situation d'aujourd'hui pour 2027), on se trompe de 4 à 6 points par département pour les grandes
+familles (Mélenchon sous-estimé de 7 à 13 points, la droite surestimée de 8 points). À 1 mois, l'erreur tombe à
+2 ou 3 points. L'extrême droite est la famille la plus stable dans les sondages.
+
+**Second tour.** Score de Le Pen dans chaque duel (moyenne pondérée des sondages de ce duel) plus l'écart de
+chaque département au national du second tour 2022. La carte, testée en prévoyant 2022 avec 2017, se trompe de
+2 points et donne le bon gagnant dans 93 % des départements. Mais les sondages surestimaient Le Pen de 2 à
+4 points au second tour en 2017 et 2022.
+
+C'est une tendance, pas une prévision : l'incertitude principale reste le niveau national des sondages.
 
 ## Rendus
 

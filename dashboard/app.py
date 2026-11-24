@@ -51,10 +51,15 @@ def charger_donnees():
     departements = pd.read_parquet(PROCESSED / "departements_2022.parquet")
     departements["departement"] = departements["code_departement"].map(noms)
     regles = pd.read_parquet(PROCESSED / "regles_association.parquet")
-    return contours, noms, votes, participation, evolution, departements, regles
+    second_tour = pd.read_parquet(PROCESSED / "second_tour_2027.parquet")
+    second_tour = second_tour[second_tour["code_departement"].isin(noms)]
+    second_tour["departement"] = second_tour["code_departement"].map(noms)
+    duels = pd.read_parquet(PROCESSED / "duels_2027.parquet")
+    return contours, noms, votes, participation, evolution, departements, regles, second_tour, duels
 
 
-CONTOURS, NOMS, VOTES, PARTICIPATION, EVOLUTION, DEPARTEMENTS, REGLES = charger_donnees()
+(CONTOURS, NOMS, VOTES, PARTICIPATION, EVOLUTION, DEPARTEMENTS, REGLES,
+ SECOND_TOUR, DUELS) = charger_donnees()
 ANNEES = sorted(VOTES["annee"].unique())
 
 
@@ -87,7 +92,7 @@ app.layout = html.Div(style={"fontFamily": "sans-serif", "maxWidth": "1200px", "
     html.H1("Présidentielles françaises : 2002-2022 et tendance 2027"),
     html.P([html.B("Équipe : "), ", ".join(EQUIPE), html.Br(), html.B("Dataset : "), DATASET]),
     html.P("Résultats du 1er tour par département (data.gouv.fr). 2027 : tendance construite à partir des "
-           "évolutions 2002-2022 et de la moyenne de 29 sondages. C'est une tendance, pas une prévision (2027* sur le curseur)."),
+           "écarts au national de 2022 et d'une moyenne pondérée des sondages (les récents comptent plus). C'est une tendance, pas une prévision (2027* sur le curseur)."),
     dcc.Tabs([
         dcc.Tab(label="Carte et évolution", children=[
             html.Div(style={"display": "flex", "gap": "20px", "margin": "15px 0"}, children=[
@@ -105,6 +110,29 @@ app.layout = html.Div(style={"fontFamily": "sans-serif", "maxWidth": "1200px", "
                 dcc.Graph(id="evolution-departement", style={"flex": 1, "height": "600px"}),
             ]),
             dcc.Graph(id="evolution-nationale"),
+        ]),
+        dcc.Tab(label="Second tour 2027", children=[
+            html.P("Score de Le Pen par département dans chaque duel : moyenne pondérée des sondages de ce duel, "
+                   "plus l'écart de chaque département au national du second tour 2022. Attention : en 2017 et 2022, "
+                   "les sondages surestimaient Le Pen de 2 à 4 points au second tour.", style={"margin": "15px 0"}),
+            html.Div(style={"width": "300px", "marginBottom": "10px"}, children=[
+                html.Label("Adversaire de Le Pen"),
+                dcc.Dropdown(id="adversaire", value="Philippe", clearable=False,
+                             options=sorted(SECOND_TOUR["adversaire"].unique()))]),
+            html.Div(style={"display": "flex"}, children=[
+                dcc.Graph(id="carte-second-tour", style={"flex": 2, "height": "600px"}),
+                html.Div(style={"flex": 1, "paddingTop": "40px"}, children=[
+                    html.B("Moyenne des sondages par duel (score de Le Pen, %)"),
+                    dash_table.DataTable(
+                        data=DUELS.round(1).astype({"dernier_sondage": str}).to_dict("records"),
+                        columns=[{"name": n, "id": c} for c, n in [("adversaire", "Adversaire"),
+                                                                  ("nb_sondages", "Sondages"),
+                                                                  ("score_rn", "Le Pen"), ("min", "Min"),
+                                                                  ("max", "Max")]],
+                        style_cell={"fontFamily": "sans-serif", "padding": "6px", "textAlign": "left"},
+                        style_header={"fontWeight": "bold"}),
+                ]),
+            ]),
         ]),
         dcc.Tab(label="Abstention", children=[
             html.Div(style={"width": "300px", "margin": "15px 0"}, children=[
@@ -219,6 +247,21 @@ def maj_nuage(indicateur, famille):
     fig.add_annotation(text=f"Corrélation : {correlation:.2f}", xref="paper", yref="paper", x=0.01, y=0.99,
                        showarrow=False)
     fig.update_yaxes(tickformat=".0%")
+    return fig
+
+
+@app.callback(Output("carte-second-tour", "figure"), Input("adversaire", "value"))
+def maj_second_tour(adversaire):
+    df = SECOND_TOUR[SECOND_TOUR["adversaire"] == adversaire]
+    fig = px.choropleth(df, geojson=CONTOURS, locations="code_departement", featureidkey="properties.code",
+                        color="part_rn", hover_name="departement", range_color=(0.2, 0.8),
+                        color_continuous_scale=[[0, "#1f5fa8"], [0.5, "#f7f7f7"], [1, "#2b0f4a"]],
+                        labels={"part_rn": "Le Pen"})
+    fig.update_geos(fitbounds="locations", visible=False)
+    fig.update_coloraxes(colorbar_tickformat=".0%")
+    gagnes = int((df["part_rn"] > 0.5).sum())
+    fig.update_layout(title=f"Le Pen contre {adversaire} : Le Pen en tête dans {gagnes} départements sur {len(df)}",
+                      margin=dict(l=0, r=0, t=40, b=0))
     return fig
 
 

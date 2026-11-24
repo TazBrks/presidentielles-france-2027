@@ -12,16 +12,20 @@ La personne qui fait la démo est tirée au sort juste avant : chaque membre de 
 2. **Exploration** (30 s) : lancer `main()`. Montrer pour une table le nombre de lignes et de colonnes, les types, les valeurs manquantes et les plages de valeurs.
 3. **Requête 1** (45 s) : les quatre premiers de chaque élection, la courbe nationale des familles, l'abstention.
 4. **Requête 2** (45 s) : le tableau des règles. Lire la première règle et expliquer support, confiance, lift.
-5. **Requête 3** (45 s) : la moyenne des sondages par famille, la comparaison avec la projection du site (corrélation 0,97 à 0,99), la carte 2027.
+5. **Requête 3** (1 min) : le test sur le passé (1,2 point d'erreur en gardant l'écart de 2022), la moyenne pondérée des sondages, la carte 2027. Puis le test complet (à 5 mois, les sondages se trompaient beaucoup : Mélenchon 2022 annoncé à 11 %, il fait 24 %) et le second tour (Le Pen 55 % contre Philippe, mais les sondages la surestimaient de 2 à 4 points).
 6. **Requête 4** (45 s) : les scores de silhouette (3 groupes), le profil des groupes, la carte.
 7. **Dashboard** (1 min) : `main()` le lance à la fin (lien http://127.0.0.1:8050).
    - Carte et évolution : extrême droite, glisser le curseur de 2002 à 2027*, cliquer sur un département.
+   - Second tour 2027 : Le Pen contre Philippe, puis contre Mélenchon.
    - Vote et territoires : niveau de vie médian, corrélation de -0,50.
    - Groupes de départements, puis Règles d'association.
 
 ## Questions probables
 - **Pourquoi des familles politiques ?** Les candidats changent à chaque élection, et l'étiquette politique est vide en 2017 et 2022.
-- **Pourquoi une tendance et pas une prévision ?** Cinq élections, c'est peu : on prolonge l'écart de chaque département au national et on le recale sur les sondages.
+- **Pourquoi une tendance et pas une prévision ?** Le test sur le passé montre que la carte est fiable (environ 1 point d'erreur par département quand on connaît le résultat national), mais le niveau national vient des sondages, faits 5 mois avant l'élection.
+- **Pourquoi ne pas prolonger la pente ?** On l'a testé : sur 2017 et 2022, prolonger la pente se trompe plus (1,4 point) que garder l'écart de 2022 (1,2 point). La géographie du vote bouge peu.
+- **Comment sont pondérés les sondages ?** Demi-vie de 30 jours (un sondage d'un mois de plus compte deux fois moins), et les hypothèses avec des candidats qui ont renoncé sont retirées (114 hypothèses gardées sur 128).
 - **Pourquoi la silhouette est-elle basse (0,20) ?** Les départements forment un continuum ; les groupes sont réels mais se chevauchent.
 - **Pourquoi ACLED par région ?** L'accès gratuit ne donne que la version agrégée ; la version complète est demandée.
 - **Que fait `LANCER_DASHBOARD=0` ?** Il permet d'exécuter le notebook sans lancer le serveur (tests).
+- **Qui va gagner en 2027 ?** Le Pen est en tête dans tous les sondages de second tour (55 % contre Philippe), mais les sondages la surestimaient de 2 à 4 points en 2017 et 2022, et à 5 mois du vote ils se trompaient beaucoup au 1er tour. Contre Philippe, le duel reste ouvert.
