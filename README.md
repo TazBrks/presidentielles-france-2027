@@ -30,6 +30,7 @@ Les données brutes ne sont pas versionnées. Les placer dans `data/raw/` :
 | `sondages.json` (29 sondages 2027, toutes hypothèses) | data.gouv.fr, sondages d'intentions de vote 2027 |
 | `communes-france-2026.parquet` | [data.gouv.fr, liste des communes de France](https://www.data.gouv.fr/datasets/6745d9ae4524d845d2138193) |
 | `FILOSOFI_CC_csv.zip` | [INSEE, Filosofi 2023](https://www.insee.fr/fr/statistiques/8984752) |
+| `TD_IMG1A_2022_csv.zip` (facultatif : déjà agrégé dans `data/reference/immigres_departements_2022.csv`) | [INSEE, recensement 2022, immigration](https://www.insee.fr/fr/statistiques/8582054?sommaire=8582058) |
 | `serie_001759970_*.zip` (indice des prix) | [INSEE, série 001759970](https://www.insee.fr/fr/statistiques/serie/001759970) |
 | `acled_france_2020_2026.csv` (version agrégée) | [ACLED Data Export Tool](https://acleddata.com), France, depuis 2020 |
 | `sondages_1er_tour.csv`, `sondages_2nd_tour.csv` (sondages 2017, 2022 et 2027, tableaux Wikipédia) | [hugoC1/sondages_presidentielles](https://github.com/hugoC1/sondages_presidentielles/tree/main/data) |
@@ -73,13 +74,14 @@ et règles d'association.
 ## Une seule table, des clés communes
 
 Le notebook rassemble toutes les sources dans `data/processed/table_unique.parquet` : une ligne par département
-et par tour (2002-2022, plus la tendance 2027), 34 colonnes. Les sources se relient par des clés communes :
+et par tour (2002-2022, plus la tendance 2027), 35 colonnes. Les sources se relient par des clés communes :
 
 | Source | Clé |
 |---|---|
 | Résultats (bureau de vote) | `code_departement`, `code_commune` (INSEE), `id_election` |
 | Communes 2026 | `code_insee` → `dep_code`, région |
 | Filosofi 2023 | code du département |
+| Immigration 2022 (recensement) | code de la commune → département |
 | ACLED | région + semaine (12 mois avant l'élection) |
 | Indice des prix | mois de l'élection |
 | Sondages | famille politique + année |

@@ -23,6 +23,7 @@ FAMILLES = {
 }
 INDICATEURS = {
     "niveau_vie_median": "Niveau de vie médian (€)", "taux_pauvrete": "Taux de pauvreté (%)",
+    "part_immigres": "Part d'immigrés",
     "indice_gini": "Indice de Gini", "part_revenu_chomage": "Part du chômage dans le revenu (%)",
     "densite": "Densité (hab./km²)", "part_population_rurale": "Part de population rurale",
     "evenements_protests_pour_100k": "Manifestations ACLED pour 100 000 hab. (région)",
