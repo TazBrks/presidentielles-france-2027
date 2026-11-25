@@ -33,7 +33,8 @@ INDICATEURS = {
 # Fonction qui charge les fichiers produits par le notebook
 # Entrée : aucune (lit la table unique et les résultats des requêtes dans data/processed, et les contours)
 # Sortie : contours (GeoJSON), noms des départements, puis les DataFrames votes, participation, évolution
-#          nationale, départements 2022, règles, et pour l'onglet bonus le second tour 2027 et les duels
+#          nationale, départements 2022, règles, série des sondages 2027, test des séries temporelles,
+#          et pour l'onglet bonus le second tour 2027 et les duels
 def charger_donnees():
     """Charge les fichiers produits par le notebook."""
     with open(DOSSIER / "reference" / "departements.geojson", encoding="utf-8") as f:
@@ -58,11 +59,13 @@ def charger_donnees():
     second_tour = second_tour[second_tour["code_departement"].isin(noms)]
     second_tour["departement"] = second_tour["code_departement"].map(noms)
     duels = pd.read_parquet(PROCESSED / "duels_2027.parquet")
-    return contours, noms, votes, participation, evolution, departements, regles, second_tour, duels
+    serie = pd.read_parquet(PROCESSED / "serie_sondages_2027.parquet")
+    tests = pd.read_parquet(PROCESSED / "test_series_temporelles.parquet")
+    return contours, noms, votes, participation, evolution, departements, regles, second_tour, duels, serie, tests
 
 
 (CONTOURS, NOMS, VOTES, PARTICIPATION, EVOLUTION, DEPARTEMENTS, REGLES,
- SECOND_TOUR, DUELS) = charger_donnees()
+ SECOND_TOUR, DUELS, SERIE_2027, TESTS_SERIES) = charger_donnees()
 ANNEES = sorted(VOTES["annee"].unique())
 
 
@@ -77,6 +80,24 @@ def figure_clusters(colonne="nom_cluster"):
     titre = "Groupes de départements (vote seul)" if colonne == "nom_cluster" else "Clustering spatial (vote + position)"
     fig.update_layout(title=titre, margin=dict(l=0, r=0, t=40, b=0),
                       legend=dict(orientation="h", y=-0.05, title=None))
+    return fig
+
+
+# Fonction qui trace la série hebdomadaire des sondages 2027 et la prévision ARIMA au jour du 1er tour
+# Entrée : aucune (SERIE_2027 : semaines de sondages puis un point « prévision » par famille)
+# Sortie : figure Plotly (courbes en trait plein, prévision en pointillés)
+def figure_serie_2027(familles=("extreme_droite", "gauche_radicale", "centre", "droite", "gauche")):
+    df = SERIE_2027[SERIE_2027["famille"].isin(familles)].copy()
+    df["famille"] = df["famille"].map(FAMILLES)
+    fig = px.line(df[df["type"] == "sondages"], x="semaine", y="part", color="famille",
+                  title="Sondages 2027 par famille (série hebdomadaire) et prévision au 1er tour (pointillés)")
+    for trace in list(fig.data):
+        f = df[df["famille"] == trace.name].sort_values("semaine")
+        fig.add_scatter(x=f["semaine"].iloc[-2:], y=f["part"].iloc[-2:], mode="lines+markers", showlegend=False,
+                        line={"dash": "dot", "color": trace.line.color})
+    fig.update_yaxes(tickformat=".0%", title="Part des intentions")
+    fig.update_xaxes(title=None)
+    fig.update_layout(legend={"orientation": "h", "y": -0.12, "title": None})
     return fig
 
 
@@ -120,6 +141,22 @@ app.layout = html.Div(style={"fontFamily": "sans-serif", "maxWidth": "1200px", "
                 dcc.Graph(id="evolution-departement", style={"flex": 1, "height": "600px"}),
             ]),
             dcc.Graph(id="evolution-nationale"),
+        ]),
+        dcc.Tab(label="Sondages 2027 (série temporelle)", children=[
+            html.P("Le niveau national 2027 vient de la série hebdomadaire des sondages, prolongée jusqu'au 1er tour "
+                   "par un modèle ARIMA(0,1,1). La méthode a été choisie par un test sur 2017 et 2022 : on prévoit le "
+                   "résultat national avec les seuls sondages publiés 5 mois ou 1 mois avant le vote.",
+                   style={"margin": "15px 0"}),
+            dcc.Graph(figure=figure_serie_2027(), style={"height": "550px"}),
+            html.B("Erreur moyenne sur le résultat national (points), selon la méthode"),
+            dash_table.DataTable(
+                data=TESTS_SERIES.pivot_table(index="methode", values="erreur_moyenne_points", columns="fenetre")
+                .assign(moyenne=lambda t: t.mean(axis=1)).sort_values("moyenne").round(2).reset_index()
+                .to_dict("records"),
+                columns=[{"name": n, "id": c} for c, n in [("methode", "Méthode"), ("5 mois avant", "5 mois avant"),
+                                                          ("1 mois avant", "1 mois avant"), ("moyenne", "Moyenne")]],
+                style_cell={"fontFamily": "sans-serif", "padding": "6px", "textAlign": "left"},
+                style_header={"fontWeight": "bold"}),
         ]),
         dcc.Tab(label="Abstention", children=[
             html.Div(style={"width": "300px", "margin": "15px 0"}, children=[

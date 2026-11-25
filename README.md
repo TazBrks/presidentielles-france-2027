@@ -108,11 +108,23 @@ le sondage national de l'époque pour chaque famille (`sondage_<famille>`, 2017,
 
 ## Tendance 2027
 
-**1er tour.** Pour chaque département et chaque famille politique, le notebook garde l'écart au score national
-de 2022 et l'applique à une moyenne pondérée des sondages 2027 (les sondages récents comptent plus, demi-vie de
-30 jours ; les hypothèses avec des candidats qui ont renoncé sont retirées). Un test sur le passé (prévoir 2017
-et 2022 avec les élections d'avant, en connaissant le résultat national) montre que garder l'écart de 2022 se
-trompe le moins : 1,2 point par département et par famille, contre 1,4 point en prolongeant la pente.
+**Niveau national : série temporelle des sondages.** Les sondages 2027 forment une série hebdomadaire par famille,
+prolongée jusqu'au 1er tour par un modèle **ARIMA(0,1,1)**. Le modèle a été choisi par un test sur 2017 et 2022
+(prévoir le résultat national avec les seuls sondages publiés 5 mois ou 1 mois avant le vote) parmi six méthodes :
+
+| Méthode | Erreur moyenne (points) |
+|---|---|
+| ARIMA(0,1,1) (retenue) | 4,2 |
+| ARIMA(1,1,0) | 4,2 |
+| Holt (tendance amortie) | 4,3 |
+| Dernier sondage | 4,5 |
+| Lissage exponentiel simple | 4,5 |
+| Moyenne pondérée (demi-vie 30 jours) | 5,3 |
+
+**Carte.** Pour chaque département et chaque famille, le notebook garde l'écart au score national de 2022 et
+l'applique au niveau national prévu. Un test sur le passé (prévoir 2017 et 2022 avec les élections d'avant, en
+connaissant le résultat national) montre que garder l'écart de 2022 se trompe le moins : 1,2 point par département
+et par famille, contre 1,4 point en prolongeant la pente. Avec 5 élections par série, un ARIMA n'aurait pas de sens.
 
 **Test complet.** On refait toute la méthode avec les seuls sondages disponibles à l'époque. À 5 mois du
 1er tour (la situation d'aujourd'hui pour 2027), on se trompe de 4 à 6 points par département pour les grandes
