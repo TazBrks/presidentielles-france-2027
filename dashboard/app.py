@@ -63,24 +63,25 @@ def charger_donnees():
 ANNEES = sorted(VOTES["annee"].unique())
 
 
-def figure_clusters():
+def figure_clusters(colonne="nom_cluster"):
     fig = px.choropleth(DEPARTEMENTS, geojson=CONTOURS, locations="code_departement",
-                        featureidkey="properties.code", color="nom_cluster", hover_name="departement",
-                        category_orders={"nom_cluster": sorted(DEPARTEMENTS["nom_cluster"].unique())})
+                        featureidkey="properties.code", color=colonne, hover_name="departement",
+                        category_orders={colonne: sorted(DEPARTEMENTS[colonne].unique())})
     fig.update_geos(fitbounds="locations", visible=False)
-    fig.update_layout(title="Groupes de départements", margin=dict(l=0, r=0, t=40, b=0),
+    titre = "Groupes de départements (vote seul)" if colonne == "nom_cluster" else "Clustering spatial (vote + position)"
+    fig.update_layout(title=titre, margin=dict(l=0, r=0, t=40, b=0),
                       legend=dict(orientation="h", y=-0.05, title=None))
     return fig
 
 
-def figure_profils():
+def figure_profils(colonne="nom_cluster"):
     colonnes = [c for c in DEPARTEMENTS.columns if c.startswith("vote_") and c != "vote_divers"] + ["taux_abstention"]
-    profils = DEPARTEMENTS.groupby("nom_cluster")[colonnes].mean().reset_index().melt(
-        id_vars="nom_cluster", var_name="indicateur", value_name="part")
+    profils = DEPARTEMENTS.groupby(colonne)[colonnes].mean().reset_index().melt(
+        id_vars=colonne, var_name="indicateur", value_name="part")
     profils["indicateur"] = profils["indicateur"].map(
         lambda c: "Abstention" if c == "taux_abstention" else FAMILLES[c.replace("vote_", "")])
-    fig = px.bar(profils, x="indicateur", y="part", color="nom_cluster", barmode="group",
-                 category_orders={"nom_cluster": sorted(DEPARTEMENTS["nom_cluster"].unique())},
+    fig = px.bar(profils, x="indicateur", y="part", color=colonne, barmode="group",
+                 category_orders={colonne: sorted(DEPARTEMENTS[colonne].unique())},
                  title="Profil moyen de chaque groupe (1er tour 2022)")
     fig.update_yaxes(tickformat=".0%", title=None)
     fig.update_layout(xaxis_title=None, legend=dict(orientation="h", y=-0.25, title=None))
@@ -157,10 +158,17 @@ app.layout = html.Div(style={"fontFamily": "sans-serif", "maxWidth": "1200px", "
         ]),
         dcc.Tab(label="Groupes de départements", children=[
             html.P("K-means sur le profil de vote au 1er tour 2022 (part de chaque famille et abstention). "
-                   "Le nombre de groupes est choisi par le score de silhouette.", style={"margin": "15px 0"}),
+                   "Le clustering spatial ajoute la position du département (latitude, longitude), qui pèse autant que "
+                   "le vote : les groupes forment des zones d'un seul tenant. Le nombre de groupes est choisi par le "
+                   "score de silhouette.", style={"margin": "15px 0"}),
+            html.Div(style={"width": "300px", "marginBottom": "10px"}, children=[
+                html.Label("Découpage"),
+                dcc.Dropdown(id="decoupage", value="nom_cluster_spatial", clearable=False,
+                             options=[{"label": "Vote + position (spatial)", "value": "nom_cluster_spatial"},
+                                      {"label": "Vote seul", "value": "nom_cluster"}])]),
             html.Div(style={"display": "flex"}, children=[
-                dcc.Graph(id="carte-clusters", figure=figure_clusters(), style={"flex": 1, "height": "600px"}),
-                dcc.Graph(id="profil-clusters", figure=figure_profils(), style={"flex": 1, "height": "600px"}),
+                dcc.Graph(id="carte-clusters", style={"flex": 1, "height": "600px"}),
+                dcc.Graph(id="profil-clusters", style={"flex": 1, "height": "600px"}),
             ]),
         ]),
         dcc.Tab(label="Règles d'association", children=[
@@ -263,6 +271,11 @@ def maj_second_tour(adversaire):
     fig.update_layout(title=f"Le Pen contre {adversaire} : Le Pen en tête dans {gagnes} départements sur {len(df)}",
                       margin=dict(l=0, r=0, t=40, b=0))
     return fig
+
+
+@app.callback(Output("carte-clusters", "figure"), Output("profil-clusters", "figure"), Input("decoupage", "value"))
+def maj_clusters(colonne):
+    return figure_clusters(colonne), figure_profils(colonne)
 
 
 def _statsmodels_disponible():

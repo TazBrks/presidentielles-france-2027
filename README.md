@@ -65,9 +65,27 @@ pip install -r requirements.txt
 python dashboard/app.py
 ```
 
-Le dashboard a trois onglets : carte et évolution par famille politique (2002-2022 et tendance 2027,
-cliquer sur un département pour voir son historique), abstention, et lien entre le vote 2022 et les
-indicateurs socio-économiques.
+Le dashboard a six onglets : carte et évolution par famille politique (2002-2022 et tendance 2027,
+cliquer sur un département pour voir son historique), second tour 2027 par duel, abstention, lien entre le
+vote 2022 et les indicateurs socio-économiques, groupes de départements (clustering spatial ou vote seul)
+et règles d'association.
+
+## Une seule table, des clés communes
+
+Le notebook rassemble toutes les sources dans `data/processed/table_unique.parquet` : une ligne par département
+et par tour (2002-2022, plus la tendance 2027), 34 colonnes. Les sources se relient par des clés communes :
+
+| Source | Clé |
+|---|---|
+| Résultats (bureau de vote) | `code_departement`, `code_commune` (INSEE), `id_election` |
+| Communes 2026 | `code_insee` → `dep_code`, région |
+| Filosofi 2023 | code du département |
+| ACLED | région + semaine (12 mois avant l'élection) |
+| Indice des prix | mois de l'élection |
+| Sondages | famille politique + année |
+| Contours | code du département |
+
+Les 96 départements de métropole trouvent une correspondance dans chaque source (les codes d'outre-mer diffèrent).
 
 ## Tendance 2027
 
