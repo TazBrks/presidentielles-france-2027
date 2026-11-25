@@ -79,14 +79,14 @@ python dashboard/app.py
 ```
 
 Le dashboard a six onglets : carte et évolution par famille politique (2002-2022 et tendance 2027,
-cliquer sur un département pour voir son historique), second tour 2027 par duel, abstention, lien entre le
+cliquer sur un département pour voir son historique), abstention, lien entre le
 vote 2022 et les indicateurs socio-économiques, groupes de départements (clustering spatial ou vote seul)
-et règles d'association.
+règles d'association, et un onglet bonus hors projet (second tour 2027).
 
 ## Une seule table, des clés communes
 
 Le notebook rassemble toutes les sources dans `data/processed/table_unique.parquet` : une ligne par département
-et par tour (2002-2022, plus la tendance 2027), 35 colonnes. Les sources se relient par des clés communes :
+et par tour (2002-2022, plus la tendance 2027), 45 colonnes. Les sources se relient par des clés communes :
 
 | Source | Clé |
 |---|---|
@@ -101,8 +101,9 @@ et par tour (2002-2022, plus la tendance 2027), 35 colonnes. Les sources se reli
 
 Les 96 départements de métropole trouvent une correspondance dans chaque source (les codes d'outre-mer diffèrent).
 
-C'est la **table de travail** : les requêtes 1, 2 et 4 du notebook et les cartes du dashboard la lisent directement.
-Les chiffres nationaux et la tendance 2027 partent des résultats par bureau de vote et des sondages.
+C'est la **seule table de travail** : toutes les requêtes la lisent, et les chiffres nationaux sont la somme de ses lignes
+(métropole : l'abstention y est environ 2 points plus basse que le chiffre officiel France entière). Elle contient aussi
+le sondage national de l'époque pour chaque famille (`sondage_<famille>`, 2017, 2022 et 2027).
 
 ## Tendance 2027
 
@@ -117,10 +118,8 @@ trompe le moins : 1,2 point par département et par famille, contre 1,4 point en
 familles (Mélenchon sous-estimé de 7 à 13 points, la droite surestimée de 8 points). À 1 mois, l'erreur tombe à
 2 ou 3 points. L'extrême droite est la famille la plus stable dans les sondages.
 
-**Second tour.** Score de Le Pen dans chaque duel (moyenne pondérée des sondages de ce duel) plus l'écart de
-chaque département au national du second tour 2022. La carte, testée en prévoyant 2022 avec 2017, se trompe de
-2 points et donne le bon gagnant dans 93 % des départements. Mais les sondages surestimaient Le Pen de 2 à
-4 points au second tour en 2017 et 2022.
+**Bonus, hors projet : le second tour.** En annexe du notebook (curiosité personnelle, autre source : les sondages
+de second tour), le score de Le Pen dans chaque duel plus l'écart de chaque département au second tour 2022.
 
 C'est une tendance, pas une prévision : l'incertitude principale reste le niveau national des sondages.
 

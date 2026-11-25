@@ -33,7 +33,7 @@ INDICATEURS = {
 # Fonction qui charge les fichiers produits par le notebook
 # Entrée : aucune (lit la table unique et les résultats des requêtes dans data/processed, et les contours)
 # Sortie : contours (GeoJSON), noms des départements, puis les DataFrames votes, participation, évolution
-#          nationale, départements 2022, règles, second tour 2027 et duels
+#          nationale, départements 2022, règles, et pour l'onglet bonus le second tour 2027 et les duels
 def charger_donnees():
     """Charge les fichiers produits par le notebook."""
     with open(DOSSIER / "reference" / "departements.geojson", encoding="utf-8") as f:
@@ -121,29 +121,6 @@ app.layout = html.Div(style={"fontFamily": "sans-serif", "maxWidth": "1200px", "
             ]),
             dcc.Graph(id="evolution-nationale"),
         ]),
-        dcc.Tab(label="Second tour 2027", children=[
-            html.P("Score de Le Pen par département dans chaque duel : moyenne pondérée des sondages de ce duel, "
-                   "plus l'écart de chaque département au national du second tour 2022. Attention : en 2017 et 2022, "
-                   "les sondages surestimaient Le Pen de 2 à 4 points au second tour.", style={"margin": "15px 0"}),
-            html.Div(style={"width": "300px", "marginBottom": "10px"}, children=[
-                html.Label("Adversaire de Le Pen"),
-                dcc.Dropdown(id="adversaire", value="Philippe", clearable=False,
-                             options=sorted(SECOND_TOUR["adversaire"].unique()))]),
-            html.Div(style={"display": "flex"}, children=[
-                dcc.Graph(id="carte-second-tour", style={"flex": 2, "height": "600px"}),
-                html.Div(style={"flex": 1, "paddingTop": "40px"}, children=[
-                    html.B("Moyenne des sondages par duel (score de Le Pen, %)"),
-                    dash_table.DataTable(
-                        data=DUELS.round(1).astype({"dernier_sondage": str}).to_dict("records"),
-                        columns=[{"name": n, "id": c} for c, n in [("adversaire", "Adversaire"),
-                                                                  ("nb_sondages", "Sondages"),
-                                                                  ("score_rn", "Le Pen"), ("min", "Min"),
-                                                                  ("max", "Max")]],
-                        style_cell={"fontFamily": "sans-serif", "padding": "6px", "textAlign": "left"},
-                        style_header={"fontWeight": "bold"}),
-                ]),
-            ]),
-        ]),
         dcc.Tab(label="Abstention", children=[
             html.Div(style={"width": "300px", "margin": "15px 0"}, children=[
                 html.Label("Élection"),
@@ -193,6 +170,29 @@ app.layout = html.Div(style={"fontFamily": "sans-serif", "maxWidth": "1200px", "
                                                           ("lift", "Lift")]],
                 style_cell={"fontFamily": "sans-serif", "padding": "8px", "textAlign": "left"},
                 style_header={"fontWeight": "bold"}),
+        ]),
+        dcc.Tab(label="Bonus : second tour 2027 (hors projet)", children=[
+            html.P("Curiosité personnelle, hors du projet (autre source : les sondages de second tour). Score de Le Pen par département dans chaque duel : moyenne pondérée des sondages de ce duel, "
+                   "plus l'écart de chaque département au national du second tour 2022. Attention : en 2017 et 2022, "
+                   "les sondages surestimaient Le Pen de 2 à 4 points au second tour.", style={"margin": "15px 0"}),
+            html.Div(style={"width": "300px", "marginBottom": "10px"}, children=[
+                html.Label("Adversaire de Le Pen"),
+                dcc.Dropdown(id="adversaire", value="Philippe", clearable=False,
+                             options=sorted(SECOND_TOUR["adversaire"].unique()))]),
+            html.Div(style={"display": "flex"}, children=[
+                dcc.Graph(id="carte-second-tour", style={"flex": 2, "height": "600px"}),
+                html.Div(style={"flex": 1, "paddingTop": "40px"}, children=[
+                    html.B("Moyenne des sondages par duel (score de Le Pen, %)"),
+                    dash_table.DataTable(
+                        data=DUELS.round(1).astype({"dernier_sondage": str}).to_dict("records"),
+                        columns=[{"name": n, "id": c} for c, n in [("adversaire", "Adversaire"),
+                                                                  ("nb_sondages", "Sondages"),
+                                                                  ("score_rn", "Le Pen"), ("min", "Min"),
+                                                                  ("max", "Max")]],
+                        style_cell={"fontFamily": "sans-serif", "padding": "6px", "textAlign": "left"},
+                        style_header={"fontWeight": "bold"}),
+                ]),
+            ]),
         ]),
     ]),
 ])
