@@ -101,6 +101,9 @@ et par tour (2002-2022, plus la tendance 2027), 35 colonnes. Les sources se reli
 
 Les 96 départements de métropole trouvent une correspondance dans chaque source (les codes d'outre-mer diffèrent).
 
+C'est la **table de travail** : les requêtes 1, 2 et 4 du notebook et les cartes du dashboard la lisent directement.
+Les chiffres nationaux et la tendance 2027 partent des résultats par bureau de vote et des sondages.
+
 ## Tendance 2027
 
 **1er tour.** Pour chaque département et chaque famille politique, le notebook garde l'écart au score national

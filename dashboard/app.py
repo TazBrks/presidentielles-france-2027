@@ -26,12 +26,12 @@ INDICATEURS = {
     "part_immigres": "Part d'immigrés",
     "indice_gini": "Indice de Gini", "part_revenu_chomage": "Part du chômage dans le revenu (%)",
     "densite": "Densité (hab./km²)", "part_population_rurale": "Part de population rurale",
-    "evenements_protests_pour_100k": "Manifestations ACLED pour 100 000 hab. (région)",
+    "manifestations_pour_100k": "Manifestations ACLED pour 100 000 hab. (région)",
 }
 
 
 # Fonction qui charge les fichiers produits par le notebook
-# Entrée : aucune (lit data/processed et data/reference)
+# Entrée : aucune (lit la table unique et les résultats des requêtes dans data/processed, et les contours)
 # Sortie : contours (GeoJSON), noms des départements, puis les DataFrames votes, participation, évolution
 #          nationale, départements 2022, règles, second tour 2027 et duels
 def charger_donnees():
@@ -39,19 +39,17 @@ def charger_donnees():
     with open(DOSSIER / "reference" / "departements.geojson", encoding="utf-8") as f:
         contours = json.load(f)
     noms = {f["properties"]["code"]: f["properties"]["nom"] for f in contours["features"]}
-    familles = pd.read_parquet(PROCESSED / "familles_departements.parquet")
-    familles = familles[(familles["tour"] == 1) & familles["code_departement"].isin(noms)]
-    tendance = pd.read_parquet(PROCESSED / "tendance_2027_departements.parquet")
-    tendance = tendance[tendance["code_departement"].isin(noms)]
-    # Une seule table : département x famille x année (2027 = tendance).
-    votes = pd.concat([
-        familles[["code_departement", "famille", "annee", "part_exprimes"]],
-        tendance.assign(annee=2027).rename(columns={"part_2027": "part_exprimes"})[
-            ["code_departement", "famille", "annee", "part_exprimes"]],
-    ])
+    # La table unique (une ligne par département et par tour, 2027 = tendance) alimente les cartes du vote
+    # et de l'abstention
+    table = pd.read_parquet(PROCESSED / "table_unique.parquet")
+    table = table[table["code_departement"].isin(noms)]
+    premier_tour = table[table["tour"] == 1]
+    votes = premier_tour.melt(id_vars=["code_departement", "annee"],
+                              value_vars=[c for c in table.columns if c.startswith("vote_")],
+                              var_name="famille", value_name="part_exprimes")
+    votes["famille"] = votes["famille"].str.removeprefix("vote_")
     votes["departement"] = votes["code_departement"].map(noms)
-    participation = pd.read_parquet(PROCESSED / "participation_departements.parquet")
-    participation = participation[participation["code_departement"].isin(noms)]
+    participation = table[~table["est_tendance"]]
     evolution = pd.read_parquet(PROCESSED / "evolution_nationale.parquet")
     departements = pd.read_parquet(PROCESSED / "departements_2022.parquet")
     departements["departement"] = departements["code_departement"].map(noms)
