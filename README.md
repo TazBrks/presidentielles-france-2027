@@ -27,8 +27,9 @@ Deux exceptions :
 - `general_results.parquet` et `candidats_results.parquet` sont des **extraits** des fichiers de data.gouv.fr,
   limités aux 10 tours de présidentielle 2002-2022 (le fichier complet des candidats fait 161 Mo, au-delà de la
   limite de 100 Mo de GitHub). Les colonnes sont identiques : le notebook fonctionne aussi avec les fichiers complets.
-- `acled_france_2020_2026.csv` n'est **pas** versionné : les conditions d'utilisation d'ACLED interdisent de
-  republier les données. Il faut le télécharger soi-même (compte gratuit) et le placer dans `data/raw/`.
+- `acled_france_2020_2026.csv` (l'export ACLED complet) n'est pas versionné. À sa place, `data/reference/acled_agrege_region_semaine.csv`
+  contient le nombre d'événements par semaine, région et type : c'est tout ce que le notebook utilise, et il le lit
+  automatiquement quand l'export manque. Avec l'export dans `data/raw/`, le notebook le préfère.
 
 Les sources de chaque fichier :
 
