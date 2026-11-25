@@ -30,6 +30,10 @@ INDICATEURS = {
 }
 
 
+# Fonction qui charge les fichiers produits par le notebook
+# Entrée : aucune (lit data/processed et data/reference)
+# Sortie : contours (GeoJSON), noms des départements, puis les DataFrames votes, participation, évolution
+#          nationale, départements 2022, règles, second tour 2027 et duels
 def charger_donnees():
     """Charge les fichiers produits par le notebook."""
     with open(DOSSIER / "reference" / "departements.geojson", encoding="utf-8") as f:
@@ -64,6 +68,9 @@ def charger_donnees():
 ANNEES = sorted(VOTES["annee"].unique())
 
 
+# Fonction qui dessine la carte des groupes de départements
+# Entrée : colonne du découpage ("nom_cluster" ou "nom_cluster_spatial")
+# Sortie : figure Plotly (carte)
 def figure_clusters(colonne="nom_cluster"):
     fig = px.choropleth(DEPARTEMENTS, geojson=CONTOURS, locations="code_departement",
                         featureidkey="properties.code", color=colonne, hover_name="departement",
@@ -75,6 +82,9 @@ def figure_clusters(colonne="nom_cluster"):
     return fig
 
 
+# Fonction qui compare le profil de vote moyen de chaque groupe
+# Entrée : colonne du découpage
+# Sortie : figure Plotly (barres groupées)
 def figure_profils(colonne="nom_cluster"):
     colonnes = [c for c in DEPARTEMENTS.columns if c.startswith("vote_") and c != "vote_divers"] + ["taux_abstention"]
     profils = DEPARTEMENTS.groupby(colonne)[colonnes].mean().reset_index().melt(
@@ -190,6 +200,9 @@ app.layout = html.Div(style={"fontFamily": "sans-serif", "maxWidth": "1200px", "
 ])
 
 
+# Fonction qui dessine une carte des départements colorée selon une colonne
+# Entrée : DataFrame avec code_departement, colonne à colorer, titre, libellé de la légende
+# Sortie : figure Plotly (carte)
 def carte(df, colonne, titre, etiquette):
     fig = px.choropleth(df, geojson=CONTOURS, locations="code_departement", featureidkey="properties.code",
                         color=colonne, hover_name="departement", color_continuous_scale="Viridis",
@@ -199,6 +212,9 @@ def carte(df, colonne, titre, etiquette):
     return fig
 
 
+# Fonction qui met à jour la carte d'une famille pour une élection (callback)
+# Entrée : famille choisie, année choisie (2027 = tendance)
+# Sortie : figure Plotly (carte)
 @app.callback(Output("carte", "figure"), Input("famille", "value"), Input("annee", "value"))
 def maj_carte(famille, annee):
     df = VOTES[(VOTES["famille"] == famille) & (VOTES["annee"] == annee)]
@@ -208,6 +224,9 @@ def maj_carte(famille, annee):
     return fig
 
 
+# Fonction qui trace l'historique d'une famille dans le département cliqué (callback)
+# Entrée : famille choisie, clic sur la carte (Paris par défaut)
+# Sortie : figure Plotly (courbe)
 @app.callback(Output("evolution-departement", "figure"), Input("famille", "value"), Input("carte", "clickData"))
 def maj_departement(famille, clic):
     code = clic["points"][0]["location"] if clic else "75"
@@ -223,6 +242,9 @@ def maj_departement(famille, clic):
     return fig
 
 
+# Fonction qui trace l'évolution nationale des familles, la famille choisie en avant (callback)
+# Entrée : famille choisie
+# Sortie : figure Plotly (courbes)
 @app.callback(Output("evolution-nationale", "figure"), Input("famille", "value"))
 def maj_nationale(famille):
     df = EVOLUTION.reset_index().melt(id_vars="annee", var_name="famille", value_name="part")
@@ -237,6 +259,9 @@ def maj_nationale(famille):
     return fig
 
 
+# Fonction qui met à jour la carte de l'abstention (callback)
+# Entrée : identifiant de l'élection (ex. "2022_pres_t1")
+# Sortie : figure Plotly (carte)
 @app.callback(Output("carte-abstention", "figure"), Input("election-abstention", "value"))
 def maj_abstention(election):
     df = PARTICIPATION[PARTICIPATION["id_election"] == election].copy()
@@ -246,6 +271,9 @@ def maj_abstention(election):
     return fig
 
 
+# Fonction qui croise le vote 2022 d'une famille avec un indicateur, avec la corrélation (callback)
+# Entrée : nom de l'indicateur, famille
+# Sortie : figure Plotly (nuage de points avec droite de tendance)
 @app.callback(Output("nuage", "figure"), Input("indicateur", "value"), Input("famille-nuage", "value"))
 def maj_nuage(indicateur, famille):
     fig = px.scatter(DEPARTEMENTS, x=indicateur, y=f"vote_{famille}", hover_name="departement",
@@ -259,6 +287,9 @@ def maj_nuage(indicateur, famille):
     return fig
 
 
+# Fonction qui met à jour la carte du second tour 2027 pour un duel (callback)
+# Entrée : nom de l'adversaire de Le Pen
+# Sortie : figure Plotly (carte du score de Le Pen)
 @app.callback(Output("carte-second-tour", "figure"), Input("adversaire", "value"))
 def maj_second_tour(adversaire):
     df = SECOND_TOUR[SECOND_TOUR["adversaire"] == adversaire]
@@ -274,11 +305,17 @@ def maj_second_tour(adversaire):
     return fig
 
 
+# Fonction qui change de découpage dans l'onglet des groupes (callback)
+# Entrée : colonne du découpage
+# Sortie : deux figures Plotly (carte, profils)
 @app.callback(Output("carte-clusters", "figure"), Output("profil-clusters", "figure"), Input("decoupage", "value"))
 def maj_clusters(colonne):
     return figure_clusters(colonne), figure_profils(colonne)
 
 
+# Fonction qui vérifie si statsmodels est installé (droite de tendance du nuage de points)
+# Entrée : aucune
+# Sortie : booléen
 def _statsmodels_disponible():
     try:
         import statsmodels  # noqa: F401
@@ -287,6 +324,9 @@ def _statsmodels_disponible():
         return False
 
 
+# Fonction qui renvoie l'application Dash
+# Entrée : aucune
+# Sortie : objet Dash (utilisé par main() dans le notebook)
 def creer_app():
     """Renvoie l'application Dash (utilisé par main() dans le notebook)."""
     return app

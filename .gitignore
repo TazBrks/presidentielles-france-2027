@@ -1,6 +1,5 @@
-# Données brutes
-data/raw/*
-!data/raw/.gitkeep
+# Données brutes : versionnées, sauf ACLED (ses conditions d'utilisation interdisent de republier les données)
+data/raw/acled_*
 
 # Secrets
 .env

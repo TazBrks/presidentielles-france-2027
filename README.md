@@ -16,11 +16,21 @@ puis dégager une tendance pour 2027. Le projet suit le processus KDD.
 - data.gouv.fr : « Présidentielle 2027 : sondages, candidatures et projection départementale »
 - INSEE : statistiques locales et séries temporelles
 - ACLED : événements en France (depuis 2020)
-- API REST Wikimedia
+- INSEE, recensement 2022 : immigration par commune
+- Sondages 2017-2027 (tableaux Wikipédia, dépôt hugoC1/sondages_presidentielles)
 
 ## Récupérer les données
 
-Les données brutes ne sont pas versionnées. Les placer dans `data/raw/` :
+Les données brutes sont versionnées dans `data/raw/` : un `git clone` suffit pour exécuter le notebook.
+Deux exceptions :
+
+- `general_results.parquet` et `candidats_results.parquet` sont des **extraits** des fichiers de data.gouv.fr,
+  limités aux 10 tours de présidentielle 2002-2022 (le fichier complet des candidats fait 161 Mo, au-delà de la
+  limite de 100 Mo de GitHub). Les colonnes sont identiques : le notebook fonctionne aussi avec les fichiers complets.
+- `acled_france_2020_2026.csv` n'est **pas** versionné : les conditions d'utilisation d'ACLED interdisent de
+  republier les données. Il faut le télécharger soi-même (compte gratuit) et le placer dans `data/raw/`.
+
+Les sources de chaque fichier :
 
 | Fichier | Source |
 |---|---|
@@ -44,8 +54,9 @@ Les contours des départements (`data/reference/departements.geojson`) viennent 
 
 ```
 data/
-  raw/          données brutes (non versionnées)
-  processed/    données nettoyées (générées par le notebook)
+  raw/          données brutes (versionnées, sauf ACLED)
+  processed/    données nettoyées (générées par le notebook, versionnées) ;
+                table_unique.parquet / .csv : la table de travail qui réunit toutes les sources
   reference/    tables de référence (familles politiques)
 notebooks/      notebook principal BOURKHIS_notebook.ipynb (fonctions + main)
 dashboard/      application Dash
@@ -59,7 +70,8 @@ pip install -r requirements.txt
 
 ## Lancer le notebook puis le dashboard
 
-1. Exécuter `notebooks/BOURKHIS_notebook.ipynb` en entier : il crée les fichiers de `data/processed/`.
+1. Exécuter `notebooks/BOURKHIS_notebook.ipynb` en entier : il crée les fichiers de `data/processed/` (environ 20 s).
+   Les fichiers de `data/processed/` sont déjà versionnés : on peut lancer le dashboard sans exécuter le notebook.
 2. Lancer le dashboard, puis ouvrir http://127.0.0.1:8050 :
 
 ```bash

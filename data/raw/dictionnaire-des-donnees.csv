@@ -1,0 +1,87 @@
+﻿fichier;colonne;description
+projection-departementale-1er-tour.csv;code_departement;Code officiel géographique du département (01 à 95, 2A, 2B)
+projection-departementale-1er-tour.csv;candidat;Nom du candidat
+projection-departementale-1er-tour.csv;parti;Parti ou étiquette
+projection-departementale-1er-tour.csv;score_estime_pct;Score estimé au 1er tour dans le département, en % des exprimés (projection, pas une mesure)
+projection-departementale-1er-tour.csv;sondage_de_base;Institut de l'enquête nationale sur laquelle repose la projection
+projection-departementale-1er-tour.csv;date_sondage_de_base;Date de publication de cette enquête (AAAA-MM-JJ)
+projection-departementale-2nd-tour.csv;code_departement;Code officiel géographique du département (01 à 95, 2A, 2B)
+projection-departementale-2nd-tour.csv;candidat_a;Premier candidat du duel
+projection-departementale-2nd-tour.csv;score_a_estime_pct;Score estimé du candidat A dans le département, en %
+projection-departementale-2nd-tour.csv;candidat_b;Second candidat du duel
+projection-departementale-2nd-tour.csv;score_b_estime_pct;Score estimé du candidat B dans le département, en %
+projection-departementale-2nd-tour.csv;rappel_le_pen_2nd_tour_2022_pct;Score officiel de M. Le Pen au 2nd tour 2022 dans le département (ministère de l'Intérieur)
+projection-departementale-2nd-tour.csv;sondage_de_base;Institut de l'enquête nationale sur laquelle repose la projection
+projection-departementale-2nd-tour.csv;date_sondage_de_base;Date de publication de cette enquête (AAAA-MM-JJ)
+evolution-intentions-vote.csv;mois;Mois de la vague retenue
+evolution-intentions-vote.csv;candidat;Nom du candidat
+evolution-intentions-vote.csv;parti;Parti ou étiquette
+evolution-intentions-vote.csv;intentions_vote_pct;Intentions de vote au 1er tour, en % des exprimés
+evolution-intentions-vote.csv;institut;Institut de sondage
+sondages-presidentielle-2027.csv;date_publication;Date de publication, telle qu'écrite sur le site
+sondages-presidentielle-2027.csv;date_publication_iso;Date de publication (AAAA-MM-JJ)
+sondages-presidentielle-2027.csv;institut;Institut de sondage
+sondages-presidentielle-2027.csv;commanditaire;Média ou organisme qui a commandé l'enquête
+sondages-presidentielle-2027.csv;numero_notice;Numéro de la notice déposée auprès de la commission des sondages
+sondages-presidentielle-2027.csv;nb_hypotheses_1er_tour;Nombre d'hypothèses de candidatures testées au 1er tour
+sondages-presidentielle-2027.csv;vague_de_reference;oui pour l'enquête retenue comme vague de référence du site
+sondages-presidentielle-2027.csv;principaux_enseignements;Terrain, échantillon et principaux résultats, ou raison pour laquelle les chiffres ne sont pas repris
+sondages-presidentielle-2027.csv;url_source;Lien vers la source officielle
+intentions-vote-vague-reference.csv;candidat;Nom du candidat
+intentions-vote-vague-reference.csv;parti;Parti ou étiquette
+intentions-vote-vague-reference.csv;intentions_vote_pct;Intentions de vote au 1er tour, en % des exprimés
+intentions-vote-vague-reference.csv;institut;Institut de sondage
+intentions-vote-vague-reference.csv;commanditaire;Média ou organisme qui a commandé l'enquête
+intentions-vote-vague-reference.csv;date_publication;Date de publication, telle qu'écrite sur le site
+intentions-vote-vague-reference.csv;date_publication_iso;Date de publication (AAAA-MM-JJ)
+intentions-vote-vague-reference.csv;terrain;Dates de terrain de l'enquête
+intentions-vote-vague-reference.csv;echantillon;Taille de l'échantillon d'inscrits
+intentions-vote-vague-reference.csv;numero_notice;Numéro de la notice déposée auprès de la commission des sondages
+intentions-vote-vague-reference.csv;url_source;Lien vers la source officielle
+duels-second-tour.csv;candidat_a;Premier candidat du duel
+duels-second-tour.csv;score_a_pct;Score mesuré du candidat A au 2nd tour, en %
+duels-second-tour.csv;candidat_b;Second candidat du duel
+duels-second-tour.csv;score_b_pct;Score mesuré du candidat B au 2nd tour, en %
+duels-second-tour.csv;institut;Institut de sondage
+duels-second-tour.csv;commanditaire;Média ou organisme qui a commandé l'enquête
+duels-second-tour.csv;date_publication;Date de publication, telle qu'écrite sur le site
+duels-second-tour.csv;date_publication_iso;Date de publication (AAAA-MM-JJ)
+duels-second-tour.csv;numero_notice;Numéro de la notice déposée auprès de la commission des sondages
+duels-second-tour.csv;url_source;Lien vers la source officielle
+candidatures-presidentielle-2027.csv;nom;Nom de la personne
+candidatures-presidentielle-2027.csv;parti_ou_etiquette;Parti ou étiquette politique déclarée
+candidatures-presidentielle-2027.csv;statut_code;Code du statut : declared, primary, likely, withdrawn
+candidatures-presidentielle-2027.csv;statut;Statut de la candidature en clair
+candidatures-presidentielle-2027.csv;fonction_actuelle;Fonction ou activité actuelle
+candidatures-presidentielle-2027.csv;intentions_vote_vague_reference_pct;"Score dans la vague de référence ; vide si non testé"
+candidatures-presidentielle-2027.csv;site_officiel;Site officiel du candidat ou de son parti
+candidatures-presidentielle-2027.csv;fiche_repere2027;Fiche détaillée sur repere2027.fr
+candidatures-presidentielle-2027.csv;programme_repere2027;"Page programme sur repere2027.fr ; vide si le candidat n'est pas dans le comparateur"
+candidatures-presidentielle-2027.csv;date_verification;Date de l'export (AAAA-MM-JJ)
+positions-candidats-par-theme.csv;theme_id;Identifiant du thème
+positions-candidats-par-theme.csv;theme;Thème du comparateur
+positions-candidats-par-theme.csv;candidat;Nom du candidat
+positions-candidats-par-theme.csv;parti;Parti ou étiquette
+positions-candidats-par-theme.csv;position_etablie;oui si une position datée et sourcée a été établie, non sinon
+positions-candidats-par-theme.csv;resume;Position en une ligne, ou mention de l'absence de position
+positions-candidats-par-theme.csv;detail;"Position détaillée ; si non établie, ce qui a été cherché"
+positions-candidats-par-theme.csv;date_position;Date de la position, telle qu'écrite sur le site
+positions-candidats-par-theme.csv;date_position_iso;Date de la position (AAAA-MM-JJ) quand elle est précise
+positions-candidats-par-theme.csv;note_de_datation;Précision sur la datation (position antérieure, document non daté…)
+positions-candidats-par-theme.csv;citation;Citation du candidat, moins de 20 mots
+positions-candidats-par-theme.csv;sources;Liens des sources, séparés par « | »
+positions-candidats-par-theme.csv;source_premiere_main_a_consulter;Pour une position non établie : la source de première main à consulter
+positions-candidats-par-theme.csv;url_repere2027;Page correspondante sur repere2027.fr
+calendrier-presidentielle-2027.csv;date;Date telle qu'écrite (peut être une période)
+calendrier-presidentielle-2027.csv;date_iso;Date (AAAA-MM-JJ) quand elle est précise
+calendrier-presidentielle-2027.csv;evenement;Intitulé de l'événement
+calendrier-presidentielle-2027.csv;description;Description factuelle
+calendrier-presidentielle-2027.csv;statut;Statut de la candidature en clair
+calendrier-presidentielle-2027.csv;echeance_majeure;oui pour les échéances majeures
+primaire-choisir-2027-resultats.csv;tour;Tour de scrutin
+primaire-choisir-2027-resultats.csv;dates_du_vote;Dates du vote
+primaire-choisir-2027-resultats.csv;rang;Rang du candidat
+primaire-choisir-2027-resultats.csv;candidat;Nom du candidat
+primaire-choisir-2027-resultats.csv;suffrages_pct;Part des suffrages exprimés, en %
+primaire-choisir-2027-resultats.csv;participation;Votants, inscrits et taux de participation
+primaire-choisir-2027-resultats.csv;url_source;Lien vers la source officielle
