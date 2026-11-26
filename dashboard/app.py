@@ -1,6 +1,6 @@
 """Dashboard Dash : présidentielles françaises 2002-2022 et tendance 2027.
 
-Lancer d'abord le notebook (notebooks/BOURKHIS_notebook.ipynb), qui crée les fichiers de data/processed,
+Lancer d'abord le notebook (notebooks/VotingProject_notebook.ipynb), qui crée les fichiers de data/processed,
 puis : python dashboard/app.py
 """
 from pathlib import Path
