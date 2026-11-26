@@ -141,5 +141,5 @@ C'est une tendance, pas une prévision : l'incertitude principale reste le nivea
 
 - `notebooks/BOURKHIS_notebook.ipynb` : le notebook.
 - `docs/BOURKHIS_dashboard.html` : export statique du dashboard (preuve de fonctionnement).
-- `docs/BOURKHIS_slides.pptx` : les slides de la soutenance (15 slides, notes de l'oral incluses).
+- `docs/presentation_finale.pptx` : les slides de la soutenance (15 slides, notes de l'oral incluses).
 - `docs/demo.md` : déroulé de la démo et questions probables.
