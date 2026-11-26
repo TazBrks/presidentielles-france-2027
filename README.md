@@ -141,5 +141,6 @@ C'est une tendance, pas une prévision : l'incertitude principale reste le nivea
 
 - `notebooks/BOURKHIS_notebook.ipynb` : le notebook.
 - `docs/BOURKHIS_dashboard.html` : export statique du dashboard (preuve de fonctionnement).
-- `docs/presentation_finale.pptx` : les slides de la soutenance (15 slides, notes de l'oral incluses).
+- `docs/BOURKHIS_slides.pdf` : les slides de la soutenance (format demandé par le sujet).
+- `docs/BOURKHIS_slides.pptx` : les mêmes slides en PowerPoint modifiable, avec les notes de l'oral (polices Dela Gothic One et Trispace, sur Google Fonts).
 - `docs/demo.md` : déroulé de la démo et questions probables.
