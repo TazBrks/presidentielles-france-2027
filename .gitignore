@@ -23,3 +23,6 @@ env/
 Thumbs.db
 .vscode/
 .idea/
+
+# Bases communales du recensement (trop lourdes pour GitHub) : agrégées dans data/reference
+data/raw/base-cc-*
