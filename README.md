@@ -18,6 +18,7 @@ puis dégager une tendance pour 2027. Le projet suit le processus KDD.
 - ACLED : événements en France (depuis 2020)
 - INSEE, recensement 2022 : immigration par commune
 - INSEE : population par grande classe d'âge et taux de chômage localisé, par département et par année
+- INSEE, recensement 2022 : diplômes et catégories socioprofessionnelles par commune
 - Sondages 2017-2027 (tableaux Wikipédia, dépôt hugoC1/sondages_presidentielles)
 
 ## Récupérer les données
@@ -45,6 +46,7 @@ Les sources de chaque fichier :
 | `TD_IMG1A_2022_csv.zip` (facultatif : déjà agrégé dans `data/reference/immigres_departements_2022.csv`) | [INSEE, recensement 2022, immigration](https://www.insee.fr/fr/statistiques/8582054?sommaire=8582058) |
 | `estim-pop-dep-sexe-gca-1975-2023.xls` (population par âge, chaque 1er janvier) | [INSEE, estimations de population](https://www.insee.fr/fr/statistiques/1893198) |
 | `sl_etc_2026T2.xls` (taux de chômage localisé, trimestriel depuis 1982) | [INSEE, taux de chômage localisés](https://www.insee.fr/fr/statistiques/2012804) |
+| `base-cc-diplomes-formation-2022_csv.zip` et `base-cc-emploi-pop-active-2022_csv.zip` (non versionnés, trop lourds : déjà agrégés dans `data/reference/diplomes_csp_departements_2022.csv`) | [INSEE, Diplômes-Formation 2022](https://www.insee.fr/fr/statistiques/8581488) et [Emploi-Population active 2022](https://www.insee.fr/fr/statistiques/8581444) |
 | `serie_001759970_*.zip` (indice des prix) | [INSEE, série 001759970](https://www.insee.fr/fr/statistiques/serie/001759970) |
 | `acled_france_2020_2026.csv` (version agrégée) | [ACLED Data Export Tool](https://acleddata.com), France, depuis 2020 |
 | `sondages_1er_tour.csv`, `sondages_2nd_tour.csv` (sondages 2017, 2022 et 2027, tableaux Wikipédia) | [hugoC1/sondages_presidentielles](https://github.com/hugoC1/sondages_presidentielles/tree/main/data) |
@@ -91,7 +93,7 @@ règles d'association, et un onglet bonus hors projet (second tour 2027).
 ## Une seule table, des clés communes
 
 Le notebook rassemble toutes les sources dans `data/processed/table_unique.parquet` : une ligne par département
-et par tour (2002-2022, plus la tendance 2027), 48 colonnes. Les sources se relient par des clés communes :
+et par tour (2002-2022, plus la tendance 2027), 52 colonnes. Les sources se relient par des clés communes :
 
 | Source | Clé |
 |---|---|
@@ -99,6 +101,7 @@ et par tour (2002-2022, plus la tendance 2027), 48 colonnes. Les sources se reli
 | Communes 2026 | `code_insee` → `dep_code`, région |
 | Filosofi 2023 | code du département |
 | Immigration 2022 (recensement) | code de la commune → département |
+| Diplômes et CSP 2022 (recensement) | code de la commune → département |
 | Âge et chômage (INSEE) | code du département + année de l'élection |
 | ACLED | région + semaine (12 mois avant l'élection) |
 | Indice des prix | mois de l'élection |

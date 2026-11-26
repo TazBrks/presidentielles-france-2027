@@ -29,6 +29,8 @@ INDICATEURS = {
     "manifestations_pour_100k": "Manifestations ACLED pour 100 000 hab. (région)",
     "taux_chomage": "Taux de chômage (%)", "part_20_39_ans": "Part des 20-39 ans",
     "part_60_ans_et_plus": "Part des 60 ans et plus",
+    "part_sans_diplome": "Part des sans-diplôme (15 ans ou plus)", "part_bac3_plus": "Part des bac+3 ou plus (15 ans ou plus)",
+    "part_ouvriers": "Part d'ouvriers (actifs)", "part_cadres": "Part de cadres (actifs)",
 }
 
 
