@@ -27,6 +27,8 @@ INDICATEURS = {
     "indice_gini": "Indice de Gini", "part_revenu_chomage": "Part du chômage dans le revenu (%)",
     "densite": "Densité (hab./km²)", "part_population_rurale": "Part de population rurale",
     "manifestations_pour_100k": "Manifestations ACLED pour 100 000 hab. (région)",
+    "taux_chomage": "Taux de chômage (%)", "part_20_39_ans": "Part des 20-39 ans",
+    "part_60_ans_et_plus": "Part des 60 ans et plus",
 }
 
 
