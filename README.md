@@ -59,7 +59,7 @@ data/
   processed/    données nettoyées (générées par le notebook, versionnées) ;
                 table_unique.parquet / .csv : la table de travail qui réunit toutes les sources
   reference/    tables de référence (familles politiques)
-notebooks/      notebook principal VotingProject_notebook.ipynb (fonctions + main)
+notebooks/      notebook principal BOURKHIS_notebook.ipynb (fonctions + main)
 dashboard/      application Dash
 docs/           slides, export du dashboard, déroulé de la démo
 ```
@@ -72,7 +72,7 @@ pip install -r requirements.txt
 
 ## Lancer le notebook puis le dashboard
 
-1. Exécuter `notebooks/VotingProject_notebook.ipynb` en entier : il crée les fichiers de `data/processed/` (environ 20 s).
+1. Exécuter `notebooks/BOURKHIS_notebook.ipynb` en entier : il crée les fichiers de `data/processed/` (environ 20 s).
    Les fichiers de `data/processed/` sont déjà versionnés : on peut lancer le dashboard sans exécuter le notebook.
 2. Lancer le dashboard, puis ouvrir http://127.0.0.1:8050 :
 
@@ -139,7 +139,7 @@ C'est une tendance, pas une prévision : l'incertitude principale reste le nivea
 
 ## Rendus
 
-- `notebooks/VotingProject_notebook.ipynb` : le notebook.
-- `docs/VotingProject_dashboard.html` : export statique du dashboard (preuve de fonctionnement).
+- `notebooks/BOURKHIS_notebook.ipynb` : le notebook.
+- `docs/BOURKHIS_dashboard.html` : export statique du dashboard (preuve de fonctionnement).
 - `docs/presentation_finale.pptx` : les slides de la soutenance (15 slides, notes de l'oral incluses).
 - `docs/demo.md` : déroulé de la démo et questions probables.

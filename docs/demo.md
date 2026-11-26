@@ -4,8 +4,8 @@ La personne qui fait la démo est tirée au sort juste avant : chaque membre de 
 
 ## Avant la séance
 1. Les données brutes sont dans `data/raw/` (voir le README).
-2. Le notebook `notebooks/VotingProject_notebook.ipynb` a été exécuté une fois en entier, pour que `data/processed/` existe.
-3. Avoir le notebook ouvert et `docs/VotingProject_dashboard.html` prêt dans un onglet, au cas où le serveur Dash ne démarre pas.
+2. Le notebook `notebooks/BOURKHIS_notebook.ipynb` a été exécuté une fois en entier, pour que `data/processed/` existe.
+3. Avoir le notebook ouvert et `docs/BOURKHIS_dashboard.html` prêt dans un onglet, au cas où le serveur Dash ne démarre pas.
 
 ## Pendant la démo
 1. **En-tête et description** (30 s) : équipe, lien GitHub, les trois dimensions du dataset, le tableau des indicateurs.
